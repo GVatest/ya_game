@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 from player import Player
 from ghost import Ghost
 from point import Point
@@ -13,6 +14,23 @@ green = (0, 255, 0)
 red = (255, 0, 0)
 purple = (255, 0, 255)
 yellow = (255, 255, 0)
+
+
+def load_image(name, colorkey=None):
+    fullname = os.path.join('images', name)
+    # если файл не существует, то выходим
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    if colorkey is not None:
+        image = image.convert()
+        if colorkey == -1:
+            colorkey = image.get_at((0, 0))
+        image.set_colorkey(colorkey)
+    else:
+        image = image.convert_alpha()
+    return image
 
 
 def setupRoomOne(all_sprites_list):
@@ -187,13 +205,10 @@ cl = len(Clyde_directions) - 1
 pygame.init()
 
 screen = pygame.display.set_mode([606, 606])
-
 pygame.display.set_caption('Pacman')
 
 background = pygame.Surface(screen.get_size())
-
 background = background.convert()
-
 background.fill(black)
 
 clock = pygame.time.Clock()
@@ -234,23 +249,48 @@ def startGame():
     c_turn = 0
     c_steps = 0
 
-    Pacman = Player(w, p_h, "images/pacman.png")
+    #Visuality
+        #pacman
+    stage3 = load_image('stage3.png', colorkey=-1)
+    stage3 = pygame.transform.scale(stage3, (32, 32))
+
+    stage2 = load_image('stage2.png', colorkey=-1)
+    stage2r = pygame.transform.scale(stage2, (32, 32))
+    stage2l = pygame.transform.rotate(stage2r, 180)
+    stage2u = pygame.transform.rotate(stage2r, 90)
+    stage2d = pygame.transform.rotate(stage2r, -90)
+
+    stage = load_image('stage1.png', colorkey=-1)
+    stager = pygame.transform.scale(stage, (32, 32))
+    stagel = pygame.transform.rotate(stager, 180)
+    stageu = pygame.transform.rotate(stager, 90)
+    staged = pygame.transform.rotate(stager, -90)
+
+    Pacman = Player(w, p_h, stage3)
     all_sprites_list.add(Pacman)
     pacman_collide.add(Pacman)
 
-    Blinky = Ghost(w, b_h, "images/Blinky.png")
+    image = load_image('Blinky.png', colorkey=-1)
+    image = pygame.transform.scale(image, (32, 32))
+    Blinky = Ghost(w, b_h, image)
     monsta_list.add(Blinky)
     all_sprites_list.add(Blinky)
 
-    Pinky = Ghost(w, m_h, "images/Pinky.png")
+    image = load_image('Pinky.png', colorkey=-1)
+    image = pygame.transform.scale(image, (32, 32))
+    Pinky = Ghost(w, m_h, image)
     monsta_list.add(Pinky)
     all_sprites_list.add(Pinky)
 
-    Inky = Ghost(i_w, m_h, "images/Inky.png")
+    image = load_image('Inky.png', colorkey=-1)
+    image = pygame.transform.scale(image, (32, 32))
+    Inky = Ghost(i_w, m_h, image)
     monsta_list.add(Inky)
     all_sprites_list.add(Inky)
 
-    Clyde = Ghost(c_w, m_h, "images/Clyde.png")
+    image = load_image('Clyde.png', colorkey=-1)
+    image = pygame.transform.scale(image, (32, 32))
+    Clyde = Ghost(c_w, m_h, image)
     monsta_list.add(Clyde)
     all_sprites_list.add(Clyde)
 
@@ -274,8 +314,10 @@ def startGame():
     bll = len(point_list)
 
     score = 0
-
-    i = 0
+    stage_counter = 0
+    flag = ''
+    STAGEEVENT = pygame.USEREVENT
+    pygame.time.set_timer(STAGEEVENT, 200)
 
     while True:
         for event in pygame.event.get():
@@ -286,12 +328,26 @@ def startGame():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     Pacman.changespeed(-30, 0)
+                    # Counter variant
+                    # if stage_counter == 0:
+                    #     Pacman.image = stage2l
+                    #     stage_counter += 1
+                    # else:
+                    #     Pacman.image = stagel
+                    #     stage_counter = 0
+                    flag = 'l'
+
                 if event.key == pygame.K_RIGHT:
                     Pacman.changespeed(30, 0)
+                    flag = 'r'
+
                 if event.key == pygame.K_UP:
                     Pacman.changespeed(0, -30)
+                    flag = 'u'
+
                 if event.key == pygame.K_DOWN:
                     Pacman.changespeed(0, 30)
+                    flag = 'd'
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
@@ -302,6 +358,35 @@ def startGame():
                     Pacman.changespeed(0, 30)
                 if event.key == pygame.K_DOWN:
                     Pacman.changespeed(0, -30)
+
+            if event.type == STAGEEVENT and flag == 'r':
+                if stage_counter == 0:
+                    Pacman.image = stage2r
+                    stage_counter += 1
+                else:
+                    Pacman.image = stager
+                    stage_counter = 0
+            elif event.type == STAGEEVENT and flag == 'l':
+                if stage_counter == 0:
+                    Pacman.image = stage2l
+                    stage_counter += 1
+                else:
+                    Pacman.image = stagel
+                    stage_counter = 0
+            elif event.type == STAGEEVENT and flag == 'u':
+                if stage_counter == 0:
+                    Pacman.image = stage2u
+                    stage_counter += 1
+                else:
+                    Pacman.image = stageu
+                    stage_counter = 0
+            elif event.type == STAGEEVENT and flag == 'd':
+                if stage_counter == 0:
+                    Pacman.image = stage2d
+                    stage_counter += 1
+                else:
+                    Pacman.image = staged
+                    stage_counter = 0
 
         Pacman.update(wall_list, gate)
 
@@ -367,6 +452,7 @@ def doNext(message, left, all_sprites_list, point_list, monsta_list, pacman_coll
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+                    sys.exit()
                 if event.key == pygame.K_RETURN:
                     del all_sprites_list
                     del point_list

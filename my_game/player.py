@@ -5,10 +5,10 @@ class Player(pygame.sprite.Sprite):
     change_x = 0
     change_y = 0
 
-    def __init__(self, x, y, filename):
+    def __init__(self, x, y, image):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load(filename).convert()
+        self.image = image
 
         self.rect = self.image.get_rect()
         self.rect.top = y
