@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         old_y = self.rect.top
         new_y = old_y + self.change_y
 
-        if new_y < 0:
+        if new_y < 0 and new_x <= 30:
             new_y = 559
             new_x = 557
 
