@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-from my_game.main import startGame
 
 SCREEN_SIZE = 640, 480
 
@@ -213,7 +212,7 @@ class MainMenu:
                     if 0 <= event.pos[0] <= 100 and 0 <= event.pos[1] <= 100:
                         Breakout().run()
                     elif 200 <= event.pos[0] <= 300 and 0 <= event.pos[1] <= 100:
-                        startGame()
+                        from my_game.main import startGame
 
 
 MainMenu().run()

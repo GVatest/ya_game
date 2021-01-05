@@ -1,6 +1,6 @@
 import pygame
 import sys
-from player import Player
+from my_game.player import Player
 
 
 class Ghost(Player):

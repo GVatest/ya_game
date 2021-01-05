@@ -1,10 +1,10 @@
 import pygame
 import sys
 import os
-from player import Player
-from ghost import Ghost
-from point import Point
-from wall import Wall
+from my_game.player import Player
+from my_game.ghost import Ghost
+from my_game.point import Point
+from my_game.wall import Wall
 
 
 black = (0, 0, 0)
@@ -17,7 +17,7 @@ yellow = (255, 255, 0)
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('images', name)
+    fullname = os.path.join('my_game\images', name)
     # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
