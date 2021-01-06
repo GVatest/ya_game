@@ -1,10 +1,7 @@
 import pygame
 import sys
-<<<<<<< HEAD
-
-SCREEN_SIZE = (360, 640)
-=======
 import os
+
 
 SCREEN_SIZE = (360, 640)
 BLACK = (0, 0, 0)
@@ -26,14 +23,12 @@ def load_image(name, colorkey=None):
         image = image.convert_alpha()
     return image
 
->>>>>>> pipes
 
 pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption('Flappy Bird')
 
-<<<<<<< HEAD
-=======
+
 # Clock #################
 clock = pygame.time.Clock()
 
@@ -70,15 +65,13 @@ bird_movement = 0
 
 
 
->>>>>>> pipes
+
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-<<<<<<< HEAD
             sys.exit()
-=======
-            sys.exit()
+
         if event.type == pygame.USEREVENT:
             flapp_counter = (flapp_counter + 1) % 3
 
@@ -110,4 +103,3 @@ while 1:
 
     pygame.display.flip()
     clock.tick(100)
->>>>>>> pipes
