@@ -52,12 +52,14 @@ bird_fly = pygame.transform.scale(bird_fly, (60, 50))
 
 # Bird Animation #################
 FLAPPEVENT = pygame.USEREVENT
-pygame.time.set_timer(FLAPPEVENT, 80)
+pygame.time.set_timer(FLAPPEVENT, 100)
 flapp_counter = 0
 gravity = 0
 bird_movement = 0
 
 # Pipes #################
+pipe = load_image('pipe.png')
+
 
 
 
@@ -90,12 +92,18 @@ while 1:
     # bird movement #################
     bird_movement += gravity
     bird_rect.centery += bird_movement
+
+    # bird animation
+    bird_rotated = pygame.transform.rotate(bird, -bird_movement * 3)
+    bird_fly_rotated = pygame.transform.rotate(bird_fly, -bird_movement * 3)
+    bird_flappy_rotated = pygame.transform.rotate(bird_flappy, -bird_movement * 3)
+
     if flapp_counter == 0:
-        screen.blit(bird, bird_rect)
+        screen.blit(bird_rotated, bird_rect)
     elif flapp_counter == 1:
-        screen.blit(bird_fly, bird_rect)
+        screen.blit(bird_fly_rotated, bird_rect)
     else:
-        screen.blit(bird_flappy, bird_rect)
+        screen.blit(bird_flappy_rotated, bird_rect)
 
     pygame.display.flip()
     clock.tick(100)
