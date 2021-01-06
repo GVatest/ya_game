@@ -57,6 +57,11 @@ flapp_counter = 0
 gravity = 0
 bird_movement = 0
 
+# Pipes #################
+
+
+
+
 
 while 1:
     for event in pygame.event.get():
