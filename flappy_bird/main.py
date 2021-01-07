@@ -7,24 +7,6 @@ SCREEN_SIZE = (360, 640)
 BLACK = (0, 0, 0)
 
 
-def create_pipe():
-    new_pipe = pipe.get_rect(top=random.choice([i for i in range(200, 480)]), left=360)
-    return new_pipe, pipe.get_rect(bottom=new_pipe.top - 150, left=360)
-
-
-def move_pipes(pipes):
-    for p in pipes:
-        p[0].centerx -= 4
-        p[1].centerx -= 4
-    return pipes
-
-
-def draw_pipes(pipes):
-    for p in pipes:
-        screen.blit(pipe, p[0])
-        screen.blit(pipe_rotated, p[1])
-
-
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     # if file not found #################
@@ -42,6 +24,34 @@ def load_image(name, colorkey=None):
     return image
 
 
+def create_pipe():
+    new_pipe = pipe.get_rect(top=random.choice([i for i in range(200, 450)]), left=360)
+    return new_pipe, pipe.get_rect(bottom=new_pipe.top - 150, left=360)
+
+
+def move_pipes(pipes):
+    for p in pipes:
+        p[0].centerx -= 3
+        p[1].centerx -= 3
+    return pipes
+
+
+def draw_pipes(pipes):
+    for p in pipes:
+        screen.blit(pipe, p[0])
+        screen.blit(pipe_rotated, p[1])
+
+
+def is_collide(pipes):
+    for i in pipes:
+        if bird_rect.colliderect(i[0]) or bird_rect.colliderect(i[1]):
+            return False
+    if bird_rect.bottom >= 570:
+        return False
+    return True
+
+
+
 pygame.init()
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption('Flappy Bird')
@@ -53,7 +63,7 @@ clock = pygame.time.Clock()
 # Environment #################
 bg = load_image('bg.png')
 ground = load_image('ground.png')
-ground = pygame.transform.scale(ground, (720, 100))
+ground = pygame.transform.scale(ground, (720, 70))
 ground_rect = ground.get_rect()
 bg_rect = bg.get_rect()
 ground_rect.top = SCREEN_SIZE[1] - ground_rect.bottom
@@ -85,6 +95,7 @@ PIPESPAWNEVENT = pygame.USEREVENT + 1
 pygame.time.set_timer(PIPESPAWNEVENT, 1500)
 pipes_group = []
 
+game_active = False
 
 while 1:
     for event in pygame.event.get():
@@ -96,23 +107,31 @@ while 1:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                gravity = 0.25
+                game_active = True
                 bird_movement = 0
-                bird_movement -= 9
-        if event.type == PIPESPAWNEVENT:
+                bird_movement -= 7
+        if event.type == PIPESPAWNEVENT and game_active:
             pipes_group.append(create_pipe())
 
     screen.fill(BLACK)
 
     screen.blit(bg, (0, 0))
 
-    # pipes
-    pipes_group = move_pipes(pipes_group)
-    draw_pipes(pipes_group)
+    if game_active:
+        gravity = 0.25
 
+        # pipes #################
+        pipes_group = move_pipes(pipes_group)
+        draw_pipes(pipes_group)
+        if not is_collide(pipes_group):
+            bird_rect.centery = 320
+            bird_movement = 0
+            gravity = 0
+            pipes_group = []
+            game_active = False
 
     # ground movement #################
-    ground_rect.left -= 4
+    ground_rect.left -= 3
     if ground_rect.right <= SCREEN_SIZE[0]:
         ground_rect.left = 0
 
