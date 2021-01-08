@@ -326,6 +326,8 @@ def startGame():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    MainMenu().run()
                 if event.key == pygame.K_LEFT:
                     Pacman.changespeed(-30, 0)
                     # Counter variant
