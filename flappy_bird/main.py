@@ -42,19 +42,31 @@ def draw_pipes(pipes):
         screen.blit(pipe_rotated, p[1])
 
 
-def is_collide(pipes):
+def is_collide(pipes, counter):
     for i in pipes:
         if bird_rect.colliderect(i[0]) or bird_rect.colliderect(i[1]):
-            return False
+            return False, counter
+        if i[0].right + 2 > bird_rect.left > i[0].right - 2:
+            counter += 1
     if bird_rect.bottom >= 570:
-        return False
-    return True
-
+        return False, counter
+    return True, counter
 
 
 pygame.init()
+
+score_counter = 0
+highest_score = 0
+
 screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption('Flappy Bird')
+font = pygame.font.Font(None, 50)
+game_over = font.render('Game Over', True, (64, 47, 3))
+press = font.render('Press Space', True, (64, 47, 3))
+play = font.render('Press Space to play', True, (64, 47, 3))
+game_over_x = SCREEN_SIZE[0] // 2 - game_over.get_width() // 2
+press_x = SCREEN_SIZE[0] // 2 - press.get_width() // 2
+play_x = SCREEN_SIZE[0] // 2 - play.get_width() // 2
 
 # Clock #################
 clock = pygame.time.Clock()
@@ -96,6 +108,7 @@ pygame.time.set_timer(PIPESPAWNEVENT, 1500)
 pipes_group = []
 
 game_active = False
+game_flag = False
 
 while 1:
     for event in pygame.event.get():
@@ -110,6 +123,7 @@ while 1:
                 game_active = True
                 bird_movement = 0
                 bird_movement -= 7
+                game_flag = True
         if event.type == PIPESPAWNEVENT and game_active:
             pipes_group.append(create_pipe())
 
@@ -123,12 +137,18 @@ while 1:
         # pipes #################
         pipes_group = move_pipes(pipes_group)
         draw_pipes(pipes_group)
-        if not is_collide(pipes_group):
+        colide, score_counter = is_collide(pipes_group, score_counter)
+        highest_score = score_counter
+        if not colide:
             bird_rect.centery = 320
             bird_movement = 0
             gravity = 0
             pipes_group = []
             game_active = False
+            score_counter = 0
+        score = font.render(str(score_counter), True, (64, 47, 3))
+        score_x = SCREEN_SIZE[0] // 2 - score.get_width() // 2
+        screen.blit(score, (score_x, 100))
 
     # ground movement #################
     ground_rect.left -= 3
@@ -152,6 +172,16 @@ while 1:
         screen.blit(bird_fly_rotated, bird_rect)
     else:
         screen.blit(bird_flappy_rotated, bird_rect)
+
+    if not game_active and game_flag:
+        screen.blit(game_over, (game_over_x, 100))
+        screen.blit(press, (press_x, 150))
+        highest_score_blit = font.render(str(highest_score), True, (64, 47, 3))
+        highest_score_blit_x = SCREEN_SIZE[0] // 2 - highest_score_blit.get_width() // 2
+        screen.blit(highest_score_blit, (highest_score_blit_x, 200))
+
+    if not game_flag:
+        screen.blit(play, (play_x, 100))
 
     pygame.display.flip()
     clock.tick(100)
