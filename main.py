@@ -32,6 +32,7 @@ class MainMenu:
                         Breakout().run()
                     elif 200 <= event.pos[0] <= 300 and 0 <= event.pos[1] <= 100:
                         from my_game.main import startGame
+                        startGame()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         MainMenu().run()

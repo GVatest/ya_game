@@ -146,12 +146,14 @@ class Breakout:
             self.screen.blit(font_surface, (x, y))
 
     def run(self):
-        while 1:
+        while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
+                        sys.path.insert(0, 'E:\PycharmProject')
+                        from main import MainMenu
                         MainMenu().run()
 
             self.clock.tick(50)

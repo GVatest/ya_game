@@ -203,7 +203,6 @@ il = len(Inky_directions) - 1
 cl = len(Clyde_directions) - 1
 
 pygame.init()
-
 screen = pygame.display.set_mode([606, 606])
 pygame.display.set_caption('Pacman')
 
@@ -225,6 +224,27 @@ c_w = 303 + (32 - 16)
 
 
 def startGame():
+    pygame.init()
+
+    screen = pygame.display.set_mode([606, 606])
+    pygame.display.set_caption('Pacman')
+
+    background = pygame.Surface(screen.get_size())
+    background = background.convert()
+    background.fill(black)
+
+    clock = pygame.time.Clock()
+
+    pygame.font.init()
+    font = pygame.font.Font("freesansbold.ttf", 24)
+
+    w = 303 - 16
+    p_h = (7 * 60) + 19
+    m_h = (4 * 60) + 19
+    b_h = (3 * 60) + 19
+    i_w = 303 - 16 - 32
+    c_w = 303 + (32 - 16)
+
     all_sprites_list = pygame.sprite.Group()
 
     point_list = pygame.sprite.Group()
@@ -327,6 +347,7 @@ def startGame():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    from main import MainMenu
                     MainMenu().run()
                 if event.key == pygame.K_LEFT:
                     Pacman.changespeed(-30, 0)
@@ -453,8 +474,8 @@ def doNext(message, left, all_sprites_list, point_list, monsta_list, pacman_coll
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    from main import MainMenu
+                    MainMenu().run()
                 if event.key == pygame.K_RETURN:
                     del all_sprites_list
                     del point_list
