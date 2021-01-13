@@ -8,7 +8,7 @@ BLACK = (0, 0, 0)
 
 
 def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join('flappy_bird/data', name)
     # if file not found #################
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
@@ -114,14 +114,16 @@ def run():
     game_flag = False
 
     # Sounds #################
-    flapp_sound = pygame.mixer.Sound('data/sounds/sfx_wing.wav')
-    hit_sound = pygame.mixer.Sound('data/sounds/sfx_hit.wav')
-    die_sound = pygame.mixer.Sound('data/sounds/sfx_die.wav')
-    score_sound = pygame.mixer.Sound('data/sounds/sfx_point.wav')
+    flapp_sound = pygame.mixer.Sound('flappy_bird/data/sounds/sfx_wing.wav')
+    hit_sound = pygame.mixer.Sound('flappy_bird/data/sounds/sfx_hit.wav')
+    die_sound = pygame.mixer.Sound('flappy_bird/data/sounds/sfx_die.wav')
+    score_sound = pygame.mixer.Sound('flappy_bird/data/sounds/sfx_point.wav')
 
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                from main import MainMenu
+                MainMenu().run()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.USEREVENT:
@@ -134,6 +136,9 @@ def run():
                     bird_movement -= 7
                     game_flag = True
                     flapp_sound.play()
+                if event.key == pygame.K_ESCAPE:
+                    from main import MainMenu
+                    MainMenu().run()
             if event.type == PIPESPAWNEVENT and game_active:
                 pipes_group.append(create_pipe(pipe))
 

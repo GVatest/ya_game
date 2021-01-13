@@ -149,10 +149,11 @@ class Breakout:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    from main import MainMenu
+                    MainMenu().run()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        sys.path.insert(0, 'E:\PycharmProject')
                         from main import MainMenu
                         MainMenu().run()
 

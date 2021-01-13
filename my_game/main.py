@@ -342,6 +342,8 @@ def startGame():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                from main import MainMenu
+                MainMenu().run()
                 pygame.quit()
                 sys.exit()
 
