@@ -23,7 +23,7 @@ colors = [(247, 19, 247), (247, 187, 19), (19, 240, 247), (239, 119, 163), (175,
           (32, 169, 78)]  # colors of the pieces 
 race = (128, 0, 0)  # current color of the piece on the screen
 game = 0  # 0 -> playing the game, 1 -> lost the game
-new_game_image = pygame.image.load("new_game_20.png")  # logo to start a nex game
+new_game_image = pygame.image.load("tetris_pygame/new_game_20.png")  # logo to start a nex game
 clicked = 0  # 1 if the user clicked to start a new game
 button = [(200, 200, 200), (255, 0, 0)]  # 
 points = 0  # 10 for each completed line
@@ -37,7 +37,7 @@ down_button = 0  # if the user clicked the minus level button
 pause = 0  # if the user clicked the pause button
 blevel = 0  # the level before the user clicked pause
 highscore = 0
-pygame.display.set_icon(pygame.image.load("tetris_logo.png"))
+pygame.display.set_icon(pygame.image.load("tetris_pygame/tetris_logo.png"))
 pygame.display.set_caption("Tetris")
 sad_face = 0
 sad_shape = [[2, 3], [2, 4], [2, 10], [2, 11], [3, 3], [3, 4], [3, 10], [3, 11], [5, 6], [5, 7], [5, 8], [6, 6], [6, 7],
@@ -489,7 +489,11 @@ makeit()
 while continuer == 0:
     for event in pygame.event.get():
         if event.type == QUIT:
+            from main import MainMenu
+            MainMenu().run()
             continuer = 1
+            pygame.quit()
+            quit()
         if event.type == KEYDOWN and game == 0 and pause == 0:
             if event.key == K_RIGHT:
                 keys[0] = 1
@@ -504,6 +508,12 @@ while continuer == 0:
                 draw_shape()
         if event.type == KEYUP and game == 0:
             keys = [0, 0, 0]
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                from main import MainMenu
+                MainMenu().run()
+                pygame.quit()
+                quit()
         if event.type == MOUSEBUTTONDOWN:
             if (event.pos[0] < 590 and event.pos[0] > 550) and (event.pos[1] < 50 and event.pos[1] > 10):
                 if highscore < points:
