@@ -38,6 +38,7 @@ class Breakout:
 
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption("ya_game")
+        pygame.display.set_icon(pygame.image.load('Y.ico'))
 
         self.clock = pygame.time.Clock()
 

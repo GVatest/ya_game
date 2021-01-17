@@ -66,6 +66,7 @@ def run():
 
     screen = pygame.display.set_mode(SCREEN_SIZE)
     pygame.display.set_caption('Flappy Bird')
+    pygame.display.set_icon(pygame.image.load('Y.ico'))
     font = pygame.font.Font(None, 50)
     game_over = font.render('Game Over', True, (64, 47, 3))
     press = font.render('Press Space', True, (64, 47, 3))

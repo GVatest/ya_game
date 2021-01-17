@@ -205,6 +205,7 @@ cl = len(Clyde_directions) - 1
 pygame.init()
 screen = pygame.display.set_mode([606, 606])
 pygame.display.set_caption('Pacman')
+pygame.display.set_icon(pygame.image.load('Y.ico'))
 
 background = pygame.Surface(screen.get_size())
 background = background.convert()

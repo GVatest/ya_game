@@ -95,13 +95,13 @@ for i in range(400, 801):
         count3 = 0
 
 
-
 class MainMenu:
     def __init__(self):
         pygame.init()
 
         self.screen = pygame.display.set_mode((1000, 1000))
         pygame.display.set_caption("ya_game")
+        pygame.display.set_icon(pygame.image.load('Y.ico'))
         self.screen.fill((0, 0, 0))
 
         self.links = []
